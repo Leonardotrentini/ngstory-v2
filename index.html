@@ -361,19 +361,30 @@
 
 
 
-  <!-- Meta Pixel: fila criada de imediato, biblioteca carregada apos a renderizacao -->
+  <!-- Meta Pixel -->
   <script>
+    var PIXEL_ID = '858743206645938';
+
+    // Beacon de imagem: registra o evento sem baixar a biblioteca do Facebook.
+    function pixelBeacon(event) {
+      new Image().src = 'https://www.facebook.com/tr?id=' + PIXEL_ID +
+        '&ev=' + encodeURIComponent(event) + '&noscript=1';
+    }
+
+    pixelBeacon('PageView');
+
     !function(f,n){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
     n.queue=[]}(window);
-    fbq('init', '858743206645938');
-    fbq('track', 'PageView');
 
+    // A biblioteca completa entra apenas na primeira interacao, para nao
+    // competir com a renderizacao. O PageView acima nao e repetido por ela.
     var pixelRequested = false;
     function loadPixel() {
       if (pixelRequested) return;
       pixelRequested = true;
+      fbq('init', PIXEL_ID);
       var s = document.createElement('script');
       s.async = true;
       s.src = 'https://connect.facebook.net/en_US/fbevents.js';
@@ -383,15 +394,17 @@
     ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (evt) {
       addEventListener(evt, loadPixel, { once: true, passive: true, capture: true });
     });
-    addEventListener('load', function () {
-      setTimeout(loadPixel, 3000);
-    });
 
+    // Se a biblioteca ainda nao respondeu, o beacon garante a entrega do Lead.
     function handleCTA() {
-      fbq('track', 'Lead', {
-        content_name: 'Grupo VIP WhatsApp',
-        content_category: 'Atacado'
-      });
+      if (window.fbq && fbq.callMethod) {
+        fbq('track', 'Lead', {
+          content_name: 'Grupo VIP WhatsApp',
+          content_category: 'Atacado'
+        });
+      } else {
+        pixelBeacon('Lead');
+      }
     }
   </script>
   <noscript>
