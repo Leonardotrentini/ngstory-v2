@@ -9,10 +9,37 @@
   <meta property="og:description" content="Peças com qualidade premium e preço de fábrica, prontas para revenda com alta rentabilidade.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ngstory-v2.vercel.app/">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <meta property="og:image" content="https://ngstory-v2.vercel.app/favicon.png">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preload" href="fonts/playfair-display.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/playfair-display-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
   <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url('fonts/inter.woff2') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('fonts/playfair-display.woff2') format('woff2');
+    }
+
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url('fonts/playfair-display-italic.woff2') format('woff2');
+    }
+
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -24,13 +51,13 @@
       --surface: #FFFFFF;
       --text-primary: #1A1A1A;
       --text-secondary: #6B6B6B;
-      --text-tertiary: #999999;
+      --text-tertiary: #737373;
       --accent: #2D2D2D;
-      --accent-warm: #C4973B;
+      --accent-warm: #8A6416;
       --accent-warm-light: #F5EDDB;
       --border: #E8E8E8;
-      --whatsapp: #25D366;
-      --whatsapp-hover: #1EBE57;
+      --whatsapp: #178040;
+      --whatsapp-hover: #136936;
     }
 
     html {
@@ -146,13 +173,13 @@
       text-decoration: none;
       border-radius: 14px;
       transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
+      box-shadow: 0 4px 16px rgba(23, 128, 64, 0.22);
     }
 
     .cta-btn:hover {
       background: var(--whatsapp-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(37, 211, 102, 0.3);
+      box-shadow: 0 6px 24px rgba(23, 128, 64, 0.28);
     }
 
     .cta-btn:active {
@@ -279,11 +306,12 @@
   </style>
 </head>
 <body>
-  <div class="page">
+  <main class="page">
 
     <!-- Logo -->
     <div class="logo-wrap">
-      <img src="negaostory-logo.png" alt="Negão Story Atacado" loading="eager">
+      <img src="negaostory-logo.webp" alt="Negão Story Atacado"
+           width="112" height="156" fetchpriority="high" decoding="sync">
     </div>
 
     <!-- Eyebrow -->
@@ -326,33 +354,44 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
+    <footer class="footer">
       <p>© 2025 Negão Story Atacado</p>
-    </div>
-  </div>
+    </footer>
+  </main>
 
 
 
-  <!-- Meta Pixel -->
+  <!-- Meta Pixel: fila criada de imediato, biblioteca carregada apos a renderizacao -->
   <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    !function(f,n){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
+    n.queue=[]}(window);
     fbq('init', '858743206645938');
     fbq('track', 'PageView');
 
+    var pixelRequested = false;
+    function loadPixel() {
+      if (pixelRequested) return;
+      pixelRequested = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(s);
+    }
+
+    ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(function (evt) {
+      addEventListener(evt, loadPixel, { once: true, passive: true, capture: true });
+    });
+    addEventListener('load', function () {
+      setTimeout(loadPixel, 3000);
+    });
+
     function handleCTA() {
-      if (typeof fbq === 'function') {
-        fbq('track', 'Lead', {
-          content_name: 'Grupo VIP WhatsApp',
-          content_category: 'Atacado'
-        });
-      }
+      fbq('track', 'Lead', {
+        content_name: 'Grupo VIP WhatsApp',
+        content_category: 'Atacado'
+      });
     }
   </script>
   <noscript>
